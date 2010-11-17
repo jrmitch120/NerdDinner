@@ -28,7 +28,7 @@ lib/MoMA/Reports/submit.xml
 *.[Rr]esharper
 *.orig
 [Uu]pgrade[Ll]og*.xml
-[Bb]in
+[Bb]in*/
 [Db]ebug*/
 _[Uu]pgrade[Rr]eport_*/
 obj/
