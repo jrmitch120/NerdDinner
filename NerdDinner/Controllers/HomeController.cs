@@ -7,7 +7,8 @@ using System.Web.Mvc;
 namespace NerdDinner.Controllers {
 
 		[HandleErrorWithELMAH]
-    public class HomeController : Controller {
+    public class HomeController : NerdDinnerController
+    {
     
         public ActionResult Index() {
             return View();

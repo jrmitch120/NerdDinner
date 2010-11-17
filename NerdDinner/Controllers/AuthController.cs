@@ -16,8 +16,10 @@ namespace MvcRelyingParty.Controllers {
 	using DotNetOpenAuth.OpenId.RelyingParty;
     using System.Web.Security;
     using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
+	using NerdDinner.Controllers;
 
-	public class AuthController : Controller {
+    public class AuthController : NerdDinnerController
+    {
 
 		/// <summary>
 		/// Gets the OpenID relying party to use for logging users in.

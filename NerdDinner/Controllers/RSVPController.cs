@@ -11,7 +11,7 @@ using NerdDinner.Models;
 namespace NerdDinner.Controllers
 {
 		[HandleErrorWithELMAH]
-		public class RSVPController : Controller
+    public class RSVPController : NerdDinnerController
 		{
 
         IDinnerRepository dinnerRepository;

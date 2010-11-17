@@ -96,7 +96,11 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\ControllerContextExt.cs" />
+    <Compile Include="Controllers\DinnerActionDescriptor.cs" />
+    <Compile Include="Controllers\DinnerActionInvoker.cs" />
     <Compile Include="Controllers\DinnersController.cs" />
+    <Compile Include="Controllers\NerdDinnerController.cs" />
     <Compile Include="Models\FlairViewModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -337,8 +341,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>48202</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost/NerdDinner</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

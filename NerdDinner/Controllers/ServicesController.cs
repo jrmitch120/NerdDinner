@@ -12,7 +12,7 @@ using System.ComponentModel;
 namespace NerdDinner.Controllers
 {
     [HandleErrorWithELMAH]
-    public class ServicesController : Controller
+    public class ServicesController : NerdDinnerController
     {
         IDinnerRepository dinnerRepository;
 

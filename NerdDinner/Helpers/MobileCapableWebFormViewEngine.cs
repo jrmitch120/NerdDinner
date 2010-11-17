@@ -1,57 +1,77 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace NerdDinner
 {
-	public class MobileCapableWebFormViewEngine : WebFormViewEngine
-	{
-		public override ViewEngineResult FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
-		{
-			ViewEngineResult result = null;
-			var request = controllerContext.HttpContext.Request;
+    public class MobileCapableWebFormViewEngine : IViewEngine
+    {
+        private readonly WebFormViewEngine mobileViewEngine;
+        private readonly WebFormViewEngine desktopViewEngine;
 
-			//This could be replaced with a switch statement as other advanced / device specific views are created
-			if (UserAgentIs(controllerContext, "iPhone"))	{
-				result = base.FindView(controllerContext, "Mobile/iPhone/" + viewName, masterName, useCache);
-			}
+        public MobileCapableWebFormViewEngine()
+        {
+            mobileViewEngine = new WebFormViewEngine { ViewLocationCache = new DefaultViewLocationCache() };
+            desktopViewEngine = new WebFormViewEngine { ViewLocationCache = new DefaultViewLocationCache() };
+        }
 
-			// Avoid unnecessary checks if this device isn't suspected to be a mobile device
-			if (request.Browser.IsMobileDevice)
-			{
-				//TODO: We are not doing any thing WinMobile SPECIAL yet!
+        public ViewEngineResult FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
+        {
+            var request = controllerContext.HttpContext.Request;
 
-				//if (UserAgentIs(controllerContext, "MSIEMobile 6"))	{
-				//  result = base.FindView(controllerContext, "Mobile/MobileIE6/" + viewName, masterName, useCache);
-				//}
-				//else if (UserAgentIs(controllerContext, "PocketIE") && request.Browser.MajorVersion >= 4)
-				//{
-				//  result = base.FindView(controllerContext, "Mobile/PocketIE/" + viewName, masterName, useCache);
-				//}
+            //This could be replaced with a switch statement as other advanced / device specific views are created
+            if (UserAgentIs(controllerContext, "iPhone"))
+            {
+                return mobileViewEngine.FindPartialView(controllerContext, "Mobile/iPhone/" + partialViewName, useCache);
+            }
 
-				//Fall back to default mobile view if no other mobile view has already been set
-				if ((result == null || result.View == null) &&
-								request.Browser.IsMobileDevice)
-				{
-					result = base.FindView(controllerContext, "Mobile/" + viewName, masterName, useCache);
-				}
-			}
+            var isMobileDevice = request.Browser.IsMobileDevice;
 
-			//Fall back to desktop view if no other view has been selected
-			if (result == null || result.View == null)
-			{
-				result = base.FindView(controllerContext, viewName, masterName, useCache);
-			}
+            //HACK: This could've been handeled differently, but it works.
+            var isAndroid = UserAgentIs(controllerContext, "Android");
+            
+            if (isMobileDevice || isAndroid) 
+            {
+                return mobileViewEngine.FindPartialView(controllerContext, "Mobile/" + partialViewName, useCache)
+                    ?? mobileViewEngine.FindPartialView(controllerContext, partialViewName, useCache);
+            }
 
-			return result;
-		}
+            return desktopViewEngine.FindPartialView(controllerContext, partialViewName, useCache);
+        }
 
-		public bool UserAgentIs(ControllerContext controllerContext, string userAgentToTest)
-		{
-			return (controllerContext.HttpContext.Request.UserAgent.IndexOf(userAgentToTest,
-							StringComparison.OrdinalIgnoreCase) > 0);
-		}
-	}
+        public ViewEngineResult FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
+        {
+            var request = controllerContext.HttpContext.Request;
+
+            //This could be replaced with a switch statement as other advanced / device specific views are created
+            if (UserAgentIs(controllerContext, "iPhone"))
+            {
+                return mobileViewEngine.FindView(controllerContext, "Mobile/iPhone/" + viewName, masterName, useCache);
+            }
+
+            var isMobileDevice = request.Browser.IsMobileDevice;
+
+            //HACK: This could've been handeled differently, but it works.
+            var isAndroid = UserAgentIs(controllerContext, "Android");
+            
+            if (isMobileDevice || isAndroid)
+            {
+                return mobileViewEngine.FindView(controllerContext, "Mobile/" + viewName, masterName, useCache)
+                    ?? mobileViewEngine.FindView(controllerContext, viewName, masterName, useCache);
+            }
+
+            return desktopViewEngine.FindView(controllerContext, viewName, masterName, useCache);
+        }
+
+        public void ReleaseView(ControllerContext controllerContext, IView view)
+        {
+            mobileViewEngine.ReleaseView(controllerContext, view);
+            desktopViewEngine.ReleaseView(controllerContext, view);
+        }
+
+        public bool UserAgentIs(ControllerContext controllerContext, string userAgentToTest)
+        {
+            return (controllerContext.HttpContext.Request.UserAgent.IndexOf(userAgentToTest,
+                            StringComparison.OrdinalIgnoreCase) > 0);
+        }
+    }
 }

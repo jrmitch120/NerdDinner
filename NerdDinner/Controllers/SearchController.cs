@@ -22,7 +22,7 @@ namespace NerdDinner.Controllers
     }
 
     [HandleErrorWithELMAH]
-    public class SearchController : Controller
+    public class SearchController : NerdDinnerController
     {
 
         IDinnerRepository dinnerRepository;
