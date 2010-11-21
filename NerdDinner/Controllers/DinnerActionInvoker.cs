@@ -1,22 +1,15 @@
 ﻿namespace NerdDinner.Controllers
 {
     using System.Web.Mvc;
+    using NerdDinner.ViewProviders;
 
     public class DinnerActionInvoker : ControllerActionInvoker
     {
-        protected override ActionDescriptor FindAction(ControllerContext controllerContext,
-                                                       ControllerDescriptor controllerDescriptor, string actionName)
-        {
-            // Find the base action
-            var foundAction = base.FindAction(controllerContext, controllerDescriptor, actionName);
+        protected override FilterInfo GetFilters(ControllerContext controllerContext, ActionDescriptor actionDescriptor) {
+            var filterList = base.GetFilters(controllerContext, actionDescriptor);
+            filterList.ResultFilters.Add(new ViewProviderFilter(actionDescriptor.ActionName));
 
-            if (foundAction is ReflectedActionDescriptor)
-            {
-                var reflectedDescriptor = foundAction as ReflectedActionDescriptor;
-                foundAction = new DinnerActionDescriptor(reflectedDescriptor.MethodInfo, actionName, controllerDescriptor);
-            }
-
-            return foundAction;
+            return filterList;
         }
     }
 }

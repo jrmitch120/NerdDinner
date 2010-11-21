@@ -1,0 +1,5 @@
+<Configuration>
+  <NamespaceFolders>
+    <SkipFolder>328C148C-DBEE-41A4-B1C7-104CBB216556/d:ViewProviders/d:Impl</SkipFolder>
+  </NamespaceFolders>
+</Configuration>

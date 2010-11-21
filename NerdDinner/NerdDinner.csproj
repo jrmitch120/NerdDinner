@@ -97,7 +97,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\ControllerContextExt.cs" />
-    <Compile Include="Controllers\DinnerActionDescriptor.cs" />
     <Compile Include="Controllers\DinnerActionInvoker.cs" />
     <Compile Include="Controllers\DinnersController.cs" />
     <Compile Include="Controllers\NerdDinnerController.cs" />
@@ -140,6 +139,13 @@
     <Compile Include="Services\OpenSearch.ashx.cs">
       <DependentUpon>OpenSearch.ashx</DependentUpon>
     </Compile>
+    <Compile Include="ViewProviders\Impl\AndroidViewProvider.cs" />
+    <Compile Include="ViewProviders\Impl\IPhoneViewProvider.cs" />
+    <Compile Include="ViewProviders\IViewPathProvider.cs" />
+    <Compile Include="ViewProviders\Impl\MobileViewProvider.cs" />
+    <Compile Include="ViewProviders\ViewProviderCollection.cs" />
+    <Compile Include="ViewProviders\ViewProviderFilter.cs" />
+    <Compile Include="ViewProviders\ViewProviders.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\NerdDinner.mdf">

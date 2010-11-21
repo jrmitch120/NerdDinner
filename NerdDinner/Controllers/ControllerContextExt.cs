@@ -1,4 +1,5 @@
-﻿namespace NerdDinner.Controllers {
+﻿namespace NerdDinner.Controllers
+{
     using System;
     using System.Web.Mvc;
 
@@ -8,11 +9,17 @@
         {
             return IsUserAgent(context, "iPhone");
         }
+
+        public static bool IsAndroidRequest(this ControllerContext context)
+        {
+            return IsUserAgent(context, "Android");
+        }
+
         public static bool IsMobileRequest(this ControllerContext context)
         {
             var request = context.HttpContext.Request;
-            var isMobile = request.Browser.IsMobileDevice;
-            return isMobile || IsUserAgent(context, "Android");
+            return request.Browser.IsMobileDevice && 
+                !(IsAndroidRequest(context) || IsiPhoneRequest(context));
         }
 
         public static bool IsUserAgent(this ControllerContext context, string userAgent)
